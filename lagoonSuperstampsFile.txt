@@ -1,0 +1,6 @@
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.0963_kepler_v1_image.fits
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.1167_kepler_v1_image.fits
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.1372_kepler_v1_image.fits
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.1576_kepler_v1_image.fits
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.1781_kepler_v1_image.fits
+Images/hlsp_k2superstamp_k2_photometer_c9-lagoon-bjd2457501.1985_kepler_v1_image.fits
