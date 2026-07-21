@@ -168,7 +168,7 @@ def create_lightcurve(filelist, r, epsf, test_ra, test_dec, ID):
 
         x_pos = xstar - cutout.center_original[0] + center_x
         y_pos = ystar - cutout.center_original[1] + center_y
-        print(x_pos, y_pos)
+#        print(x_pos, y_pos)
 
         if(len(xcoords) > 0):
             posStar = Table(names = ['x_0', 'y_0'], data = [xcoords, ycoords])
@@ -218,32 +218,28 @@ def create_lightcurve(filelist, r, epsf, test_ra, test_dec, ID):
         result_tab_1 = photometry(residual_image, init_params = posStar1)
         residual_image_star1 = photometry.make_residual_image(residual_image)
 
-#        print('Got here 1!')
-
 # Isolate the star of interest again:
         distances = np.sqrt((result_tab_1['x_fit'] - x_pos)**2 + (result_tab_1['y_fit'] - y_pos)**2)
         good_star_idx = np.where(distances < 1)
 
 #        if(len(result_tab_1[0]) == 12):
-        if(len(result_tab_1) > 0):
+        if((len(result_tab_1) > 0) & (len(good_star_idx[0]) > 0)):
             xfits = np.append(xfits, result_tab_1['x_fit'][good_star_idx[0][0]])
         else:
             xfits = np.append(xfits, x_pos)
 #        if(len(result_tab_1[0]) == 12):
-        if(len(result_tab_1) > 0):
+        if((len(result_tab_1) > 0) & (len(good_star_idx[0]) > 0)):
             yfits = np.append(yfits, result_tab_1['y_fit'][good_star_idx[0][0]])
         else:
             yfits = np.append(yfits, y_pos)
 #        if(len(result_tab_1[0]) == 12):
-        if(len(result_tab_1) > 0):
+        if((len(result_tab_1) > 0) & (len(good_star_idx[0]) > 0)):
             uncertainty = np.append(uncertainty, result_tab_1['flux_err'][good_star_idx[0][0]])
         elif(len(result_tab_1) < 1 and counter != 0):
             uncertainty = np.append(uncertainty, uncertainty[counter-1]*100)
         else:
             uncertainty = np.append(uncertainty, 400000/mag2.data[0])
 
-#        print('Got here 2!')
-            
         position = [xfits[counter], yfits[counter]]
 ##        aperture = CircularAperture(position, r = 3.)
 ##        gc.collect()
@@ -255,7 +251,7 @@ def create_lightcurve(filelist, r, epsf, test_ra, test_dec, ID):
 ##        residual_fluxes = np.append(residual_fluxes, residual_phot_table['aperture_sum'])
 
 #        print(len(result_tab_1))
-        if(len(result_tab_1) > 0):
+        if((len(result_tab_1) > 0) & (len(good_star_idx[0]) > 0)):
           fluxes = np.append(fluxes, result_tab_1['flux_fit'][good_star_idx[0][0]])
         else:
           fluxes = np.append(fluxes, np.nan)
@@ -294,13 +290,13 @@ def create_lightcurve(filelist, r, epsf, test_ra, test_dec, ID):
 #    print('lens: ', len(times), len(fluxes))
 
     plt.clf()
-    plt.plot(times, fluxes/np.median(fluxes),'bo',markersize=1.5)
+    plt.plot(times, fluxes/np.nanmedian(fluxes),'bo',markersize=1.5)
     plt.xlabel('Time [BJD-2454833]')
     plt.ylabel('Norm. flux')
     plt.savefig('lightcurve_' + str(ID.split("_")[0]) + '.png')
 
     plt.clf()
-    plt.plot(times, fluxes/np.median(fluxes),'bo',markersize=1.5)
+    plt.plot(times, fluxes/np.nanmedian(fluxes),'bo',markersize=1.5)
     plt.ylim(1-2.5*np.nanstd(fluxes/np.nanmedian(fluxes)),1+2.5*np.nanstd(fluxes/np.nanmedian(fluxes)))
     plt.xlabel('Time [BJD-2454833]')
     plt.ylabel('Norm. flux')
